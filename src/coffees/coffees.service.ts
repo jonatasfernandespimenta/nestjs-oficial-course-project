@@ -2,7 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService, ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dto/pagination-query.dto';
-import { Event } from 'src/events/entities/event.entity';
+import { Event } from '../events/entities/event.entity';
 import { DataSource, Repository } from 'typeorm';
 import coffeesConfig from './config/coffees.config';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
@@ -18,10 +18,7 @@ export class CoffeesService {
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
     private readonly dataSource: DataSource,
-    @Inject(coffeesConfig.KEY)
-    private readonly configService: ConfigType<typeof coffeesConfig>,
   ) {
-    console.log(configService.foo);
   }
 
   findAll(paginationQuery: PaginationDto) {
@@ -35,9 +32,9 @@ export class CoffeesService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const coffee = await this.coffeeRepository.findOne({
-      where: { id },
+      where: { id: +id },
       relations: {
         flavors: true,
       },
@@ -78,7 +75,7 @@ export class CoffeesService {
     return this.coffeeRepository.save(coffee);
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     const coffee = await this.findOne(id);
     return this.coffeeRepository.remove(coffee);
   }

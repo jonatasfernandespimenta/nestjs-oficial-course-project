@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Protocol } from 'src/common/decorators/protocol.decorator';
-import { Public } from 'src/common/decorators/public.decorator';
-import { PaginationDto } from 'src/common/dto/pagination-query.dto';
-import { ParseIntPipe } from 'src/common/pipes/parse-int.pipe';
+import { Protocol } from '../common/decorators/protocol.decorator';
+import { Public } from '../common/decorators/public.decorator';
+import { PaginationDto } from '../common/dto/pagination-query.dto';
+import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -24,7 +24,7 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): Promise<Coffee> {
+  findOne(@Param('id', ParseIntPipe) id: string): Promise<Coffee> {
     return this.coffeesService.findOne(id);
   }
 
@@ -39,7 +39,7 @@ export class CoffeesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: string) {
     return this.coffeesService.delete(id);
   }
 
